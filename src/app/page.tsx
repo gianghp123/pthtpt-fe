@@ -50,7 +50,7 @@ export default function SeatPicker() {
   };
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-purple-600 via-pink-500 to-orange-400 flex items-center justify-center p-8">
+    <>
       <div className="bg-white backdrop-blur-lg rounded-3xl p-8 shadow-2xl max-w-4xl w-full">
         <h1 className="text-4xl font-bold text-center mb-8 bg-linear-to-br from-purple-600 via-pink-500 to-orange-400 bg-clip-text text-transparent">
           Select Your Seat
@@ -201,6 +201,6 @@ export default function SeatPicker() {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 }

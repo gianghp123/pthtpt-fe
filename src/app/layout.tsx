@@ -27,7 +27,11 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {children}
+        <div className="min-h-screen bg-linear-to-br from-purple-600 via-pink-500 to-orange-400 p-8">
+          <div className="main-center">
+            {children}
+          </div>
+        </div>
       </body>
     </html>
   );
