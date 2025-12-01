@@ -44,6 +44,11 @@ export default function SeatPicker() {
     return "bg-blue-500 hover:bg-blue-600 cursor-pointer";
   };
 
+  const removeBookedSeat = (seatNumber: number) => {
+    setMyBookedSeats(myBookedSeats.filter((s) => s !== seatNumber));
+    setBookedSeats(bookedSeats.filter((s) => s !== seatNumber));
+  };
+
   return (
     <div className="min-h-screen bg-linear-to-br from-purple-600 via-pink-500 to-orange-400 flex items-center justify-center p-8">
       <div className="bg-white backdrop-blur-lg rounded-3xl p-8 shadow-2xl max-w-4xl w-full">
@@ -95,14 +100,12 @@ export default function SeatPicker() {
       </div>
 
       {/* Floating Button - My Booked Seats */}
-      {myBookedSeats.length > 0 && (
-        <button
-          onClick={() => setShowMySeats(true)}
-          className="fixed bottom-8 right-8 bg-linear-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-semibold py-4 px-6 rounded-full shadow-2xl transition-all transform hover:scale-110 active:scale-95 flex items-center gap-2"
-        >
-          <span className="text-lg">My Seats ({myBookedSeats.length})</span>
-        </button>
-      )}
+      <button
+        onClick={() => setShowMySeats(true)}
+        className="fixed bottom-8 right-8 bg-linear-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 text-white font-semibold py-4 px-6 rounded-full shadow-2xl transition-all transform hover:scale-110 active:scale-95 flex items-center gap-2"
+      >
+        <span className="text-lg">My Seats ({myBookedSeats.length || 0})</span>
+      </button>
 
       {/* My Seats Modal */}
       {showMySeats && (
@@ -122,15 +125,25 @@ export default function SeatPicker() {
 
             <div className="mb-6">
               <p className="text-gray-600 mb-4">
-                You have booked the following seats:
+                {myBookedSeats.length > 0
+                  ? "You have booked the following seats:"
+                  : "You have not booked any seats yet."}
               </p>
               <div className="grid grid-cols-4 gap-3">
                 {myBookedSeats.map((seat) => (
                   <div
                     key={seat}
-                    className="bg-linear-to-r from-green-500 to-emerald-600 text-white text-xl font-bold rounded-lg py-4 text-center"
+                    className="relative bg-linear-to-r from-green-500 to-emerald-600 text-white text-xl font-bold rounded-lg py-4 text-center"
                   >
                     {seat}
+
+                    {/* Delete seat button */}
+                    <button
+                      onClick={() => removeBookedSeat(seat)}
+                      className="absolute -top-2 -right-2 bg-red-500 hover:bg-red-600 text-white rounded-lg p-1 shadow-md"
+                    >
+                      <X size={16} />
+                    </button>
                   </div>
                 ))}
               </div>
