@@ -1,285 +1,355 @@
 'use client'
-import { useState } from "react"
-import { Filter, Download, RefreshCw, X } from "lucide-react"
+import { useState, useEffect } from 'react';
+import { NodeCard } from '@/components/NodeCard';
+import { SeatCard } from '@/components/SeatCard';
+import { TransactionLog } from '@/components/TransactionLog';
+import { ElectionModal } from '@/components/ElectionModal';
+import { ElectionHistoryModal } from '@/components/ElectionHistoryModal';
+import { Power, History } from 'lucide-react';
 
-export default function Page() {
-  const [seats, setSeats] = useState([
-    { id: 1, seat_number: "A1", status: "AVAILABLE", customer_name: null, booked_by_node: null, updated_at: "2025-01-01 12:00:00" },
-    { id: 2, seat_number: "A2", status: "BOOKED", customer_name: "John Doe", booked_by_node: "Node 3", updated_at: "2025-01-01 12:05:00" },
-    { id: 3, seat_number: "A3", status: "AVAILABLE", customer_name: null, booked_by_node: null, updated_at: "2025-01-01 12:00:02" },
-    { id: 4, seat_number: "A4", status: "BOOKED", customer_name: "Jane Smith", booked_by_node: "Node 1", updated_at: "2025-01-01 12:10:00" },
-    { id: 5, seat_number: "A5", status: "AVAILABLE", customer_name: null, booked_by_node: null, updated_at: "2025-01-01 12:00:00" },
-    { id: 6, seat_number: "A6", status: "BOOKED", customer_name: "Bob Wilson", booked_by_node: "Node 2", updated_at: "2025-01-01 12:15:00" },
-    { id: 7, seat_number: "A7", status: "AVAILABLE", customer_name: null, booked_by_node: null, updated_at: "2025-01-01 12:00:00" },
-    { id: 8, seat_number: "A8", status: "AVAILABLE", customer_name: null, booked_by_node: null, updated_at: "2025-01-01 12:00:00" },
-    { id: 9, seat_number: "B1", status: "AVAILABLE", customer_name: null, booked_by_node: null, updated_at: "2025-01-01 12:00:00" },
-    { id: 10, seat_number: "B2", status: "BOOKED", customer_name: "Alice Brown", booked_by_node: "Node 1", updated_at: "2025-01-01 12:20:00" },
-    { id: 11, seat_number: "B3", status: "AVAILABLE", customer_name: null, booked_by_node: null, updated_at: "2025-01-01 12:00:00" },
-    { id: 12, seat_number: "B4", status: "AVAILABLE", customer_name: null, booked_by_node: null, updated_at: "2025-01-01 12:00:00" },
-    { id: 13, seat_number: "B5", status: "AVAILABLE", customer_name: null, booked_by_node: null, updated_at: "2025-01-01 12:00:00" },
-    { id: 14, seat_number: "B6", status: "AVAILABLE", customer_name: null, booked_by_node: null, updated_at: "2025-01-01 12:00:00" },
-    { id: 15, seat_number: "B7", status: "AVAILABLE", customer_name: null, booked_by_node: null, updated_at: "2025-01-01 12:00:00" },
-    { id: 16, seat_number: "B8", status: "AVAILABLE", customer_name: null, booked_by_node: null, updated_at: "2025-01-01 12:00:00" },
-    { id: 17, seat_number: "C1", status: "AVAILABLE", customer_name: null, booked_by_node: null, updated_at: "2025-01-01 12:00:00" },
-    { id: 18, seat_number: "C2", status: "AVAILABLE", customer_name: null, booked_by_node: null, updated_at: "2025-01-01 12:00:00" },
-    { id: 19, seat_number: "C3", status: "BOOKED", customer_name: "Charlie Davis", booked_by_node: "Node 3", updated_at: "2025-01-01 12:25:00" },
-    { id: 20, seat_number: "C4", status: "AVAILABLE", customer_name: null, booked_by_node: null, updated_at: "2025-01-01 12:00:00" },
-    { id: 21, seat_number: "C5", status: "AVAILABLE", customer_name: null, booked_by_node: null, updated_at: "2025-01-01 12:00:00" },
-    { id: 22, seat_number: "C6", status: "AVAILABLE", customer_name: null, booked_by_node: null, updated_at: "2025-01-01 12:00:00" },
-    { id: 23, seat_number: "C7", status: "AVAILABLE", customer_name: null, booked_by_node: null, updated_at: "2025-01-01 12:00:00" },
-    { id: 24, seat_number: "C8", status: "AVAILABLE", customer_name: null, booked_by_node: null, updated_at: "2025-01-01 12:00:00" },
-    { id: 25, seat_number: "D1", status: "AVAILABLE", customer_name: null, booked_by_node: null, updated_at: "2025-01-01 12:00:00" },
-    { id: 26, seat_number: "D2", status: "AVAILABLE", customer_name: null, booked_by_node: null, updated_at: "2025-01-01 12:00:00" },
-    { id: 27, seat_number: "D3", status: "AVAILABLE", customer_name: null, booked_by_node: null, updated_at: "2025-01-01 12:00:00" },
-    { id: 28, seat_number: "D4", status: "AVAILABLE", customer_name: null, booked_by_node: null, updated_at: "2025-01-01 12:00:00" },
-    { id: 29, seat_number: "D5", status: "AVAILABLE", customer_name: null, booked_by_node: null, updated_at: "2025-01-01 12:00:00" },
-    { id: 30, seat_number: "D6", status: "AVAILABLE", customer_name: null, booked_by_node: null, updated_at: "2025-01-01 12:00:00" },
-    { id: 31, seat_number: "D7", status: "AVAILABLE", customer_name: null, booked_by_node: null, updated_at: "2025-01-01 12:00:00" },
-    { id: 32, seat_number: "D8", status: "AVAILABLE", customer_name: null, booked_by_node: null, updated_at: "2025-01-01 12:00:00" },
-  ])
+interface Node {
+  id: number;
+  alive: boolean;
+  isLeader: boolean;
+}
 
-  const [logs, setLogs] = useState([
-    { id: 1, node_id: "Node 3", action_type: "BUY", description: "Purchased seat A2 for John Doe", created_at: "2025-01-01 12:05:01" },
-    { id: 2, node_id: "Node 1", action_type: "LOCK", description: "Locked seat A1", created_at: "2025-01-01 11:58:12" },
-    { id: 3, node_id: "Node 2", action_type: "RELEASE", description: "Released seat B3", created_at: "2025-01-01 11:55:30" },
-    { id: 4, node_id: "Node 3", action_type: "BUY", description: "Purchased seat A4 for Jane Smith", created_at: "2025-01-01 12:10:05" },
-  ])
+interface Seat {
+  id: string;
+  seatNumber: string;
+  available: boolean;
+  customerName?: string;
+  bookedByNode?: number;
+}
 
-  const availableSeats = seats.filter(s => s.status === "AVAILABLE").length
-  const bookedSeats = seats.filter(s => s.status === "BOOKED").length
+interface Transaction {
+  id: number;
+  timestamp: string;
+  nodeId: number;
+  actionType: 'LOCK' | 'BUY' | 'RELEASE' | 'ELECTION' | 'HEARTBEAT';
+  description: string;
+}
 
-  const clearAllSeats = () => {
-    const clearedSeats = seats.map(seat => ({
-      ...seat,
-      status: "AVAILABLE",
-      customer_name: null,
-      booked_by_node: null,
-      updated_at: new Date().toISOString().replace('T', ' ').substring(0, 19)
-    }))
-    setSeats(clearedSeats)
+interface ElectionStep {
+  nodeId: number;
+  message: string;
+  type: 'candidate' | 'election' | 'victory';
+}
+
+interface ElectionRecord {
+  id: number;
+  timestamp: string;
+  oldLeaderId: number | null;
+  newLeaderId: number;
+  candidates: number[];
+  reason: string;
+}
+
+export default function App() {
+  const [systemActive, setSystemActive] = useState(true);
+  const [isElecting, setIsElecting] = useState(false);
+  const [electionSteps, setElectionSteps] = useState<ElectionStep[]>([]);
+  const [newLeaderId, setNewLeaderId] = useState<number | null>(null);
+  const [electionHistory, setElectionHistory] = useState<ElectionRecord[]>([]);
+  const [showHistoryModal, setShowHistoryModal] = useState(false);
+  const [nodes, setNodes] = useState<Node[]>([
+    { id: 1, alive: true, isLeader: false },
+    { id: 2, alive: true, isLeader: false },
+    { id: 3, alive: true, isLeader: true },
+    { id: 4, alive: true, isLeader: false },
+    { id: 5, alive: true, isLeader: false },
+    { id: 6, alive: true, isLeader: false },
+  ]);
+
+  const [seats, setSeats] = useState<Seat[]>([
+    { id: '1', seatNumber: 'A1', available: true },
+    { id: '2', seatNumber: 'A2', available: false, customerName: 'Jane Doe', bookedByNode: 3 },
+    { id: '3', seatNumber: 'A3', available: true },
+    { id: '4', seatNumber: 'A4', available: false, customerName: 'John Smith', bookedByNode: 1 },
+    { id: '5', seatNumber: 'A5', available: true },
+    { id: '6', seatNumber: 'B1', available: true },
+    { id: '7', seatNumber: 'B2', available: false, customerName: 'Alice Johnson', bookedByNode: 5 },
+    { id: '8', seatNumber: 'B3', available: true },
+    { id: '9', seatNumber: 'B4', available: true },
+    { id: '10', seatNumber: 'B5', available: false, customerName: 'Bob Wilson', bookedByNode: 2 },
+    { id: '11', seatNumber: 'C1', available: true },
+    { id: '12', seatNumber: 'C2', available: true },
+    { id: '13', seatNumber: 'C3', available: false, customerName: 'Carol White', bookedByNode: 4 },
+    { id: '14', seatNumber: 'C4', available: true },
+    { id: '15', seatNumber: 'C5', available: true },
+    { id: '16', seatNumber: 'D1', available: false, customerName: 'David Brown', bookedByNode: 6 },
+    { id: '17', seatNumber: 'D2', available: true },
+    { id: '18', seatNumber: 'D3', available: true },
+    { id: '19', seatNumber: 'D4', available: false, customerName: 'Emma Davis', bookedByNode: 3 },
+    { id: '20', seatNumber: 'D5', available: true },
+  ]);
+
+  const [transactions, setTransactions] = useState<Transaction[]>([
+    { id: 1, timestamp: '14:32:15', nodeId: 3, actionType: 'BUY', description: 'Customer Jane Doe bought Seat A2' },
+    { id: 2, timestamp: '14:32:18', nodeId: 1, actionType: 'LOCK', description: 'Node 1 locked Seat A4' },
+    { id: 3, timestamp: '14:32:20', nodeId: 1, actionType: 'BUY', description: 'Customer John Smith bought Seat A4' },
+    { id: 4, timestamp: '14:32:25', nodeId: 5, actionType: 'BUY', description: 'Customer Alice Johnson bought Seat B2' },
+    { id: 5, timestamp: '14:32:30', nodeId: 3, actionType: 'HEARTBEAT', description: 'Leader Node 3 sent heartbeat' },
+  ]);
+
+  const handleKillNode = (nodeId: number) => {
+    setNodes(prev => prev.map(node => 
+      node.id === nodeId ? { ...node, alive: false, isLeader: false } : node
+    ));
     
-    const newLog = {
-      id: logs.length + 1,
-      node_id: "Admin",
-      action_type: "CLEAR",
-      description: "Cleared all seats",
-      created_at: new Date().toISOString().replace('T', ' ').substring(0, 19)
+    // Trigger election if killed node was leader
+    const killedNode = nodes.find(n => n.id === nodeId);
+    if (killedNode?.isLeader) {
+      setTimeout(() => electNewLeader(nodeId), 500);
     }
-    setLogs([newLog, ...logs])
-  }
+
+    addTransaction({
+      id: Date.now(),
+      timestamp: getCurrentTime(),
+      nodeId: nodeId,
+      actionType: 'ELECTION',
+      description: `Node ${nodeId} has been terminated`,
+    });
+  };
+
+  const handleReviveNode = (nodeId: number) => {
+    setNodes(prev => prev.map(node => 
+      node.id === nodeId ? { ...node, alive: true } : node
+    ));
+
+    addTransaction({
+      id: Date.now(),
+      timestamp: getCurrentTime(),
+      nodeId: nodeId,
+      actionType: 'HEARTBEAT',
+      description: `Node ${nodeId} has been revived`,
+    });
+  };
+
+  const electNewLeader = (oldLeaderId: number) => {
+    // Start election process
+    setIsElecting(true);
+    setElectionSteps([]);
+    setNewLeaderId(null);
+
+    // Bully algorithm: select highest ID among alive nodes
+    const aliveNodes = nodes.filter(n => n.alive && n.id !== oldLeaderId);
+    
+    if (aliveNodes.length === 0) {
+      setIsElecting(false);
+      return;
+    }
+
+    // Simulate election steps
+    const steps: ElectionStep[] = [];
+    
+    // Step 1: Announce candidates
+    aliveNodes.forEach((node, index) => {
+      setTimeout(() => {
+        const step: ElectionStep = {
+          nodeId: node.id,
+          message: `Node ${node.id} is a candidate for leadership`,
+          type: 'candidate',
+        };
+        setElectionSteps(prev => [...prev, step]);
+      }, index * 400);
+    });
+
+    // Step 2: Election messages
+    const sortedNodes = [...aliveNodes].sort((a, b) => b.id - a.id);
+    sortedNodes.forEach((node, index) => {
+      setTimeout(() => {
+        const step: ElectionStep = {
+          nodeId: node.id,
+          message: `Node ${node.id} sends election message (ID: ${node.id})`,
+          type: 'election',
+        };
+        setElectionSteps(prev => [...prev, step]);
+      }, (aliveNodes.length * 400) + (index * 400));
+    });
+
+    // Step 3: Determine winner
+    const newLeader = aliveNodes.reduce((max, node) => node.id > max.id ? node : max);
+    
+    setTimeout(() => {
+      const step: ElectionStep = {
+        nodeId: newLeader.id,
+        message: `Node ${newLeader.id} has the highest ID and wins the election!`,
+        type: 'victory',
+      };
+      setElectionSteps(prev => [...prev, step]);
+      setNewLeaderId(newLeader.id);
+      setIsElecting(false);
+      
+      // Update leader status
+      setNodes(prev => prev.map(node => ({
+        ...node,
+        isLeader: node.id === newLeader.id && node.alive,
+      })));
+
+      addTransaction({
+        id: Date.now() + 1,
+        timestamp: getCurrentTime(),
+        nodeId: newLeader.id,
+        actionType: 'ELECTION',
+        description: `Node ${newLeader.id} elected as new leader (Bully Algorithm)`,
+      });
+
+      // Record election history
+      const electionRecord: ElectionRecord = {
+        id: Date.now(),
+        timestamp: getCurrentTime(),
+        oldLeaderId: oldLeaderId,
+        newLeaderId: newLeader.id,
+        candidates: aliveNodes.map(n => n.id),
+        reason: `Node ${oldLeaderId} was terminated`,
+      };
+      setElectionHistory(prev => [electionRecord, ...prev].slice(0, 50)); // Keep last 50 records
+    }, (aliveNodes.length * 400) + (sortedNodes.length * 400) + 400);
+  };
+
+  const getCurrentTime = () => {
+    const now = new Date();
+    return now.toTimeString().split(' ')[0];
+  };
+
+  const addTransaction = (transaction: Transaction) => {
+    setTransactions(prev => [transaction, ...prev].slice(0, 50)); // Keep last 50 transactions
+  };
+
+  // Simulate some activity
+  useEffect(() => {
+    if (!systemActive) return;
+
+    const interval = setInterval(() => {
+      const aliveNodes = nodes.filter(n => n.alive);
+      if (aliveNodes.length === 0) return;
+
+      const randomNode = aliveNodes[Math.floor(Math.random() * aliveNodes.length)];
+      const leader = nodes.find(n => n.isLeader);
+
+      if (leader && Math.random() > 0.7) {
+        addTransaction({
+          id: Date.now(),
+          timestamp: getCurrentTime(),
+          nodeId: leader.id,
+          actionType: 'HEARTBEAT',
+          description: `Leader Node ${leader.id} sent heartbeat`,
+        });
+      } else if (Math.random() > 0.5) {
+        const availableSeats = seats.filter(s => s.available);
+        if (availableSeats.length > 0 && Math.random() > 0.3) {
+          const randomSeat = availableSeats[Math.floor(Math.random() * availableSeats.length)];
+          const customerNames = ['Michael Lee', 'Sarah Connor', 'Tom Hardy', 'Lisa Ray', 'Chris Evans'];
+          const customerName = customerNames[Math.floor(Math.random() * customerNames.length)];
+          
+          setSeats(prev => prev.map(seat =>
+            seat.id === randomSeat.id
+              ? { ...seat, available: false, customerName, bookedByNode: randomNode.id }
+              : seat
+          ));
+
+          addTransaction({
+            id: Date.now(),
+            timestamp: getCurrentTime(),
+            nodeId: randomNode.id,
+            actionType: 'BUY',
+            description: `Customer ${customerName} bought Seat ${randomSeat.seatNumber}`,
+          });
+        }
+      }
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, [systemActive, nodes, seats]);
 
   return (
-    <div className="min-h-screen bg-linear-to-br from-slate-50 via-blue-50 to-indigo-50 p-4 md:p-8 rounded-lg">
-      <div className="w-7xl mx-auto space-y-6">
-        
+    <div className="min-h-screen w-full max-w-[1600px] mx-auto">
+      <div>
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <div className="flex justify-between items-center mb-8">
           <div>
-            <h1 className="text-4xl font-bold bg-linear-to-r from-blue-600 to-indigo-600 bg-clip-text text-transparent">
-              Admin Dashboard
-            </h1>
-            <p className="text-slate-600 mt-1">Manage seats and monitor transactions in real-time</p>
+            <h1 className="text-white mb-2">Distributed System Monitor</h1>
+            <p className="text-white/80">Bully Algorithm • Real-time Node Coordination</p>
           </div>
           
-          <div className="flex gap-2">
-            <button className="px-4 py-2 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors flex items-center gap-2 shadow-sm">
-              <RefreshCw className="w-4 h-4" />
-              <span className="text-sm font-medium">Refresh</span>
-            </button>
-            <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2 shadow-sm">
-              <Download className="w-4 h-4" />
-              <span className="text-sm font-medium">Export</span>
-            </button>
-          </div>
+          {/* System Status Toggle */}
+          <button
+            onClick={() => setSystemActive(!systemActive)}
+            className={`flex items-center gap-2 px-6 py-3 rounded-2xl border backdrop-blur-md transition-all ${
+              systemActive
+                ? 'bg-green-500/20 border-green-300/50 text-white'
+                : 'bg-red-500/20 border-red-300/50 text-white'
+            }`}
+          >
+            <Power className="w-5 h-5" />
+            System {systemActive ? 'Active' : 'Inactive'}
+          </button>
         </div>
 
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-slate-600">Total Seats</p>
-                <p className="text-3xl font-bold text-slate-900 mt-2">{seats.length}</p>
-              </div>
-              <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                <svg className="w-6 h-6 text-blue-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z" />
-                </svg>
-              </div>
+        {/* Main Content Card Wrapper */}
+        <div className="bg-white/40 backdrop-blur-xl border border-white/20 rounded-3xl p-8 shadow-2xl">
+          {/* Top Section: Node Cluster Status */}
+          <div className="mb-8">
+            <h2 className="text-white mb-4">Node Cluster Status</h2>
+            <div className="grid grid-cols-6 gap-4">
+              {nodes.map(node => (
+                <NodeCard
+                  key={node.id}
+                  node={node}
+                  onKill={handleKillNode}
+                  onRevive={handleReviveNode}
+                />
+              ))}
             </div>
           </div>
 
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-slate-600">Available</p>
-                <p className="text-3xl font-bold text-green-600 mt-2">{availableSeats}</p>
-              </div>
-              <div className="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center">
-                <svg className="w-6 h-6 text-green-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                </svg>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-white rounded-xl p-6 shadow-sm border border-slate-100 hover:shadow-md transition-shadow">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-sm font-medium text-slate-600">Booked</p>
-                <p className="text-3xl font-bold text-red-600 mt-2">{bookedSeats}</p>
-              </div>
-              <div className="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center">
-                <svg className="w-6 h-6 text-red-600" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                </svg>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* SEATS GRID */}
-        <div className="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
-          <div className="p-6 border-b border-slate-100">
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-              <div>
-                <h2 className="text-2xl font-bold text-slate-900">Seat Layout</h2>
-                <p className="text-sm text-slate-600 mt-1">Click on a seat to view details</p>
-              </div>
-              
-              <button 
-                onClick={clearAllSeats}
-                className="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition-colors flex items-center gap-2 shadow-sm"
-              >
-                <X className="w-4 h-4" />
-                <span className="text-sm font-medium">Clear All Seats</span>
-              </button>
-            </div>
-          </div>
-
-          {/* Theater-style seat layout */}
-          <div className="p-8">
-            <div className="max-w-4xl mx-auto">
-              {/* Screen indicator */}
-              <div className="mb-8">
-                <div className="h-2 bg-linear-to-r from-transparent via-slate-300 to-transparent rounded-full mb-2"></div>
-                <p className="text-center text-sm text-slate-500 font-medium">SCREEN</p>
-              </div>
-
-              {/* Seats Grid - 4 rows x 8 columns */}
-              <div className="space-y-4">
-                {['A', 'B', 'C', 'D'].map((row, rowIndex) => (
-                  <div key={row} className="flex items-center gap-3">
-                    {/* Row label */}
-                    <div className="w-8 text-center font-bold text-slate-700">{row}</div>
-                    
-                    {/* Seats in row */}
-                    <div className="flex-1 grid grid-cols-8 gap-3">
-                      {[1, 2, 3, 4, 5, 6, 7, 8].map((seatNum) => {
-                        const seat = seats.find(s => s.seat_number === `${row}${seatNum}`)
-                        const isBooked = seat?.status === "BOOKED"
-                        
-                        return (
-                          <div
-                            key={seatNum}
-                            className={`aspect-square rounded-lg border-2 flex flex-col items-center justify-center cursor-pointer transition-all duration-200 ${
-                              isBooked
-                                ? 'bg-red-50 border-red-300 hover:bg-red-100'
-                                : 'bg-green-50 border-green-300 hover:bg-green-100 hover:scale-105'
-                            }`}
-                            title={isBooked ? `${seat.customer_name} - ${seat.booked_by_node}` : 'Available'}
-                          >
-                            {/* Seat icon */}
-                            <svg 
-                              className={`w-6 h-6 ${isBooked ? 'text-red-600' : 'text-green-600'}`} 
-                              fill="currentColor" 
-                              viewBox="0 0 24 24"
-                            >
-                              <path d="M4 9h16v10c0 1.1-.9 2-2 2H6c-1.1 0-2-.9-2-2V9zm3-6h10v2H7V3zm-4 6h2V7c0-1.1.9-2 2-2h14c1.1 0 2 .9 2 2v2h2v2H3V9z"/>
-                            </svg>
-                            <span className={`text-xs font-semibold mt-1 ${isBooked ? 'text-red-700' : 'text-green-700'}`}>
-                              {row}{seatNum}
-                            </span>
-                          </div>
-                        )
-                      })}
-                    </div>
-                  </div>
+          {/* Middle Section: Cinema Seat Map */}
+          <div className="mb-8">
+            <h2 className="text-white mb-4">Cinema Seat Map (Distributed Database)</h2>
+            <div className="bg-white/20 backdrop-blur-md border border-white/30 rounded-3xl p-6">
+              <div className="grid grid-cols-5 gap-4">
+                {seats.map(seat => (
+                  <SeatCard key={seat.id} seat={seat} />
                 ))}
               </div>
-
-              {/* Legend */}
-              <div className="flex items-center justify-center gap-6 mt-8 pt-6 border-t border-slate-100">
-                <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 rounded bg-green-50 border-2 border-green-300"></div>
-                  <span className="text-sm text-slate-600">Available</span>
-                </div>
-                <div className="flex items-center gap-2">
-                  <div className="w-4 h-4 rounded bg-red-50 border-2 border-red-300"></div>
-                  <span className="text-sm text-slate-600">Booked</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        {/* LOGS TABLE */}
-        <div className="bg-white rounded-xl shadow-sm border border-slate-100 overflow-hidden">
-          <div className="p-6 border-b border-slate-100">
-            <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-              <div>
-                <h2 className="text-2xl font-bold text-slate-900">Transaction Logs</h2>
-                <p className="text-sm text-slate-600 mt-1">Recent activity across all nodes</p>
-              </div>
-              
-              <button className="px-4 py-2 border border-slate-200 rounded-lg hover:bg-slate-50 transition-colors flex items-center gap-2">
-                <Filter className="w-4 h-4" />
-                <span className="text-sm font-medium">Filter by Action</span>
-              </button>
             </div>
           </div>
 
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="bg-slate-50 border-b border-slate-100">
-                  <th className="text-left py-4 px-6 font-semibold text-slate-700 text-sm">Node</th>
-                  <th className="text-left py-4 px-6 font-semibold text-slate-700 text-sm">Action</th>
-                  <th className="text-left py-4 px-6 font-semibold text-slate-700 text-sm">Description</th>
-                  <th className="text-left py-4 px-6 font-semibold text-slate-700 text-sm">Timestamp</th>
-                </tr>
-              </thead>
-              <tbody>
-                {logs.map(log => (
-                  <tr key={log.id} className="border-b border-slate-50 hover:bg-slate-50 transition-colors">
-                    <td className="py-4 px-6">
-                      <span className="px-2.5 py-1 rounded-md bg-slate-100 text-slate-700 text-sm font-semibold">
-                        {log.node_id}
-                      </span>
-                    </td>
-                    <td className="py-4 px-6">
-                      <span className={`inline-flex items-center px-3 py-1 rounded-full text-sm font-medium border ${
-                        log.action_type === "BUY" 
-                          ? "bg-blue-50 text-blue-700 border-blue-200" 
-                          : log.action_type === "LOCK"
-                          ? "bg-amber-50 text-amber-700 border-amber-200"
-                          : log.action_type === "CLEAR"
-                          ? "bg-red-50 text-red-700 border-red-200"
-                          : "bg-purple-50 text-purple-700 border-purple-200"
-                      }`}>
-                        {log.action_type}
-                      </span>
-                    </td>
-                    <td className="py-4 px-6 text-slate-700">{log.description}</td>
-                    <td className="py-4 px-6 text-slate-500 text-sm">{log.created_at}</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          {/* Bottom Section: Live Transaction Logs */}
+          <div>
+            <h2 className="text-white mb-4">Live Transaction Logs</h2>
+            <TransactionLog transactions={transactions} />
           </div>
         </div>
-
       </div>
+
+      {/* Election Modal */}
+      <ElectionModal
+        isElecting={isElecting}
+        electionSteps={electionSteps}
+        newLeaderId={newLeaderId}
+      />
+
+      {/* Election History Modal */}
+      <ElectionHistoryModal
+        isOpen={showHistoryModal}
+        onClose={() => setShowHistoryModal(false)}
+        elections={electionHistory}
+      />
+
+      {/* History Button */}
+      <button
+        onClick={() => setShowHistoryModal(true)}
+        className="fixed bottom-8 right-8 bg-purple-500/30 border-2 border-purple-300/50 text-white px-6 py-3 rounded-2xl backdrop-blur-md hover:bg-purple-500/40 transition-all shadow-lg flex items-center gap-2"
+      >
+        <History className="w-5 h-5" />
+        <span>Election History</span>
+        {electionHistory.length > 0 && (
+          <span className="bg-yellow-400/80 text-purple-900 px-2 py-0.5 rounded-lg text-xs">
+            {electionHistory.length}
+          </span>
+        )}
+      </button>
     </div>
   );
 }

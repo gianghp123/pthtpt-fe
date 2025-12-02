@@ -73,8 +73,8 @@ export default function SeatPicker() {
   if (!isLoaded) return null;
 
   return (
-    <div className="min-h-screen bg-slate-50 flex items-center justify-center p-4 md:p-8 font-sans">
-      <div className="max-w-5xl w-full mx-auto">
+    <div className="min-h-screen flex items-center justify-center p-4 md:p-8 font-sans">
+      <div>
         <div className="bg-white rounded-[2.5rem] p-8 md:p-12 shadow-2xl shadow-slate-200/50 border border-slate-100">
           <header className="text-center mb-12">
             <h1 className="text-4xl md:text-5xl font-extrabold text-slate-900 mb-4 tracking-tight">
@@ -86,7 +86,7 @@ export default function SeatPicker() {
           </header>
 
           <div className="mb-16 relative perspective-1000">
-            <div className="h-16 w-3/4 mx-auto bg-gradient-to-b from-indigo-500/20 to-transparent rounded-t-[50%] transform rotate-x-12 shadow-[0_20px_50px_-10px_rgba(99,102,241,0.3)] border-t border-indigo-200/50 backdrop-blur-sm"></div>
+            <div className="h-16 w-3/4 mx-auto bg-linear-to-b from-indigo-500/20 to-transparent rounded-t-[50%] transform rotate-x-12 shadow-[0_20px_50px_-10px_rgba(99,102,241,0.3)] border-t border-indigo-200/50 backdrop-blur-sm"></div>
             <div className="absolute -top-8 left-1/2 -translate-x-1/2 text-indigo-300 text-sm font-medium tracking-[0.5em] uppercase">
               Screen
             </div>
