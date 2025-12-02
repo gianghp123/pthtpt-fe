@@ -268,7 +268,7 @@ export default function App() {
         {/* Header */}
         <div className="flex justify-between items-center mb-8">
           <div>
-            <h1 className="text-white mb-2">Distributed System Monitor</h1>
+            <h1 className="text-white mb-2 text-2xl">Admin Dashboard</h1>
             <p className="text-white/80">Bully Algorithm • Real-time Node Coordination</p>
           </div>
           
