@@ -1,20 +1,21 @@
 import { TransactionDto } from "@/features/transaction_logs/dto/response/transaction.dto";
+import { ActionType } from "@/lib/enums/action-type.enum";
 
 interface TransactionLogProps {
   transactions: TransactionDto[];
 }
 
-const getActionColor = (actionType: string) => {
+const getActionColor = (actionType: ActionType) => {
   switch (actionType) {
-    case 'BUY':
+    case ActionType.BUY:
       return 'bg-green-500/80 text-white';
-    case 'LOCK':
+    case ActionType.LOCK:
       return 'bg-yellow-500/80 text-white';
-    case 'RELEASE':
+    case ActionType.RELEASE:
       return 'bg-blue-500/80 text-white';
-    case 'ELECTION':
+    case ActionType.ELECTION:
       return 'bg-purple-500/80 text-white';
-    case 'HEARTBEAT':
+    case ActionType.HEARTBEAT:
       return 'bg-pink-500/80 text-white';
     default:
       return 'bg-gray-500/80 text-white';
