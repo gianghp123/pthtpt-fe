@@ -1,13 +1,9 @@
+import { NodeDto } from '@/features/nodes/dto/response/node.dto';
 import { Crown, Circle } from 'lucide-react';
 
-interface Node {
-  id: number;
-  alive: boolean;
-  isLeader: boolean;
-}
 
 interface NodeCardProps {
-  node: Node;
+  node: NodeDto;
   onKill: (nodeId: number) => void;
   onRevive: (nodeId: number) => void;
 }

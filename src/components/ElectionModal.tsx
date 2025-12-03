@@ -1,15 +1,10 @@
+import { ElectionStepDto } from '@/features/election/dto/response/election-step.dto';
 import { Crown, Zap, CheckCircle } from 'lucide-react';
 import { useEffect, useState } from 'react';
 
-interface ElectionStep {
-  nodeId: number;
-  message: string;
-  type: 'candidate' | 'election' | 'victory';
-}
-
 interface ElectionModalProps {
   isElecting: boolean;
-  electionSteps: ElectionStep[];
+  electionSteps: ElectionStepDto[];
   newLeaderId: number | null;
 }
 

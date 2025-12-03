@@ -1,13 +1,7 @@
-interface Seat {
-  id: string;
-  seatNumber: string;
-  available: boolean;
-  customerName?: string;
-  bookedByNode?: number;
-}
+import { SeatDto } from "@/features/seats/dto/response/seat.dto";
 
 interface SeatCardProps {
-  seat: Seat;
+  seat: SeatDto;
 }
 
 export function SeatCard({ seat }: SeatCardProps) {

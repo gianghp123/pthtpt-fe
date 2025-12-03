@@ -6,52 +6,24 @@ import { TransactionLog } from '@/components/TransactionLog';
 import { ElectionModal } from '@/components/ElectionModal';
 import { ElectionHistoryModal } from '@/components/ElectionHistoryModal';
 import { Power, History } from 'lucide-react';
+import { ElectionRecordDto } from '@/features/election/dto/response/election-record.dto';
+import { ElectionStepDto } from '@/features/election/dto/response/election-step.dto';
+import { NodeDto } from '@/features/nodes/dto/response/node.dto';
+import { SeatDto } from '@/features/seats/dto/response/seat.dto';
+import { TransactionDto } from '@/features/transaction_logs/dto/response/transaction.dto';
+import { ActionType } from '@/lib/enums/action-type.enum';
 
-interface Node {
-  id: number;
-  alive: boolean;
-  isLeader: boolean;
-}
 
-interface Seat {
-  id: string;
-  seatNumber: string;
-  available: boolean;
-  customerName?: string;
-  bookedByNode?: number;
-}
 
-interface Transaction {
-  id: number;
-  timestamp: string;
-  nodeId: number;
-  actionType: 'LOCK' | 'BUY' | 'RELEASE' | 'ELECTION' | 'HEARTBEAT';
-  description: string;
-}
-
-interface ElectionStep {
-  nodeId: number;
-  message: string;
-  type: 'candidate' | 'election' | 'victory';
-}
-
-interface ElectionRecord {
-  id: number;
-  timestamp: string;
-  oldLeaderId: number | null;
-  newLeaderId: number;
-  candidates: number[];
-  reason: string;
-}
 
 export default function App() {
   const [systemActive, setSystemActive] = useState(true);
   const [isElecting, setIsElecting] = useState(false);
-  const [electionSteps, setElectionSteps] = useState<ElectionStep[]>([]);
+  const [electionSteps, setElectionSteps] = useState<ElectionStepDto[]>([]);
   const [newLeaderId, setNewLeaderId] = useState<number | null>(null);
-  const [electionHistory, setElectionHistory] = useState<ElectionRecord[]>([]);
+  const [electionHistory, setElectionHistory] = useState<ElectionRecordDto[]>([]);
   const [showHistoryModal, setShowHistoryModal] = useState(false);
-  const [nodes, setNodes] = useState<Node[]>([
+  const [nodes, setNodes] = useState<NodeDto[]>([
     { id: 1, alive: true, isLeader: false },
     { id: 2, alive: true, isLeader: false },
     { id: 3, alive: true, isLeader: true },
@@ -60,7 +32,7 @@ export default function App() {
     { id: 6, alive: true, isLeader: false },
   ]);
 
-  const [seats, setSeats] = useState<Seat[]>([
+  const [seats, setSeats] = useState<SeatDto[]>([
     { id: '1', seatNumber: 'A1', available: true },
     { id: '2', seatNumber: 'A2', available: false, customerName: 'Jane Doe', bookedByNode: 3 },
     { id: '3', seatNumber: 'A3', available: true },
@@ -83,12 +55,12 @@ export default function App() {
     { id: '20', seatNumber: 'D5', available: true },
   ]);
 
-  const [transactions, setTransactions] = useState<Transaction[]>([
-    { id: 1, timestamp: '14:32:15', nodeId: 3, actionType: 'BUY', description: 'Customer Jane Doe bought Seat A2' },
-    { id: 2, timestamp: '14:32:18', nodeId: 1, actionType: 'LOCK', description: 'Node 1 locked Seat A4' },
-    { id: 3, timestamp: '14:32:20', nodeId: 1, actionType: 'BUY', description: 'Customer John Smith bought Seat A4' },
-    { id: 4, timestamp: '14:32:25', nodeId: 5, actionType: 'BUY', description: 'Customer Alice Johnson bought Seat B2' },
-    { id: 5, timestamp: '14:32:30', nodeId: 3, actionType: 'HEARTBEAT', description: 'Leader Node 3 sent heartbeat' },
+  const [transactions, setTransactions] = useState<TransactionDto[]>([
+    { id: 1, timestamp: '14:32:15', nodeId: 3, actionType: ActionType.BUY, description: 'Customer Jane Doe bought Seat A2' },
+    { id: 2, timestamp: '14:32:18', nodeId: 1, actionType: ActionType.LOCK, description: 'Node 1 locked Seat A4' },
+    { id: 3, timestamp: '14:32:20', nodeId: 1, actionType: ActionType.BUY, description: 'Customer John Smith bought Seat A4' },
+    { id: 4, timestamp: '14:32:25', nodeId: 5, actionType: ActionType.BUY, description: 'Customer Alice Johnson bought Seat B2' },
+    { id: 5, timestamp: '14:32:30', nodeId: 3, actionType: ActionType.HEARTBEAT, description: 'Leader Node 3 sent heartbeat' },
   ]);
 
   const handleKillNode = (nodeId: number) => {
@@ -106,7 +78,7 @@ export default function App() {
       id: Date.now(),
       timestamp: getCurrentTime(),
       nodeId: nodeId,
-      actionType: 'ELECTION',
+      actionType: ActionType.ELECTION,
       description: `Node ${nodeId} has been terminated`,
     });
   };
@@ -120,7 +92,7 @@ export default function App() {
       id: Date.now(),
       timestamp: getCurrentTime(),
       nodeId: nodeId,
-      actionType: 'HEARTBEAT',
+      actionType: ActionType.HEARTBEAT,
       description: `Node ${nodeId} has been revived`,
     });
   };
@@ -140,12 +112,12 @@ export default function App() {
     }
 
     // Simulate election steps
-    const steps: ElectionStep[] = [];
+    const steps: ElectionStepDto[] = [];
     
     // Step 1: Announce candidates
     aliveNodes.forEach((node, index) => {
       setTimeout(() => {
-        const step: ElectionStep = {
+        const step: ElectionStepDto = {
           nodeId: node.id,
           message: `Node ${node.id} is a candidate for leadership`,
           type: 'candidate',
@@ -158,7 +130,7 @@ export default function App() {
     const sortedNodes = [...aliveNodes].sort((a, b) => b.id - a.id);
     sortedNodes.forEach((node, index) => {
       setTimeout(() => {
-        const step: ElectionStep = {
+        const step: ElectionStepDto = {
           nodeId: node.id,
           message: `Node ${node.id} sends election message (ID: ${node.id})`,
           type: 'election',
@@ -171,7 +143,7 @@ export default function App() {
     const newLeader = aliveNodes.reduce((max, node) => node.id > max.id ? node : max);
     
     setTimeout(() => {
-      const step: ElectionStep = {
+      const step: ElectionStepDto = {
         nodeId: newLeader.id,
         message: `Node ${newLeader.id} has the highest ID and wins the election!`,
         type: 'victory',
@@ -190,12 +162,12 @@ export default function App() {
         id: Date.now() + 1,
         timestamp: getCurrentTime(),
         nodeId: newLeader.id,
-        actionType: 'ELECTION',
+        actionType: ActionType.ELECTION,
         description: `Node ${newLeader.id} elected as new leader (Bully Algorithm)`,
       });
 
       // Record election history
-      const electionRecord: ElectionRecord = {
+      const electionRecord: ElectionRecordDto = {
         id: Date.now(),
         timestamp: getCurrentTime(),
         oldLeaderId: oldLeaderId,
@@ -212,7 +184,7 @@ export default function App() {
     return now.toTimeString().split(' ')[0];
   };
 
-  const addTransaction = (transaction: Transaction) => {
+  const addTransaction = (transaction: TransactionDto) => {
     setTransactions(prev => [transaction, ...prev].slice(0, 50)); // Keep last 50 transactions
   };
 
@@ -232,7 +204,7 @@ export default function App() {
           id: Date.now(),
           timestamp: getCurrentTime(),
           nodeId: leader.id,
-          actionType: 'HEARTBEAT',
+          actionType: ActionType.HEARTBEAT,
           description: `Leader Node ${leader.id} sent heartbeat`,
         });
       } else if (Math.random() > 0.5) {
@@ -252,7 +224,7 @@ export default function App() {
             id: Date.now(),
             timestamp: getCurrentTime(),
             nodeId: randomNode.id,
-            actionType: 'BUY',
+            actionType: ActionType.BUY,
             description: `Customer ${customerName} bought Seat ${randomSeat.seatNumber}`,
           });
         }

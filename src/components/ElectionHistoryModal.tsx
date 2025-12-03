@@ -1,18 +1,11 @@
+import { ElectionRecordDto } from '@/features/election/dto/response/election-record.dto';
 import { Crown, X, Clock, Zap } from 'lucide-react';
 
-interface ElectionRecord {
-  id: number;
-  timestamp: string;
-  oldLeaderId: number | null;
-  newLeaderId: number;
-  candidates: number[];
-  reason: string;
-}
 
 interface ElectionHistoryModalProps {
   isOpen: boolean;
   onClose: () => void;
-  elections: ElectionRecord[];
+  elections: ElectionRecordDto[];
 }
 
 export function ElectionHistoryModal({ isOpen, onClose, elections }: ElectionHistoryModalProps) {
@@ -159,7 +152,7 @@ export function ElectionHistoryModal({ isOpen, onClose, elections }: ElectionHis
   );
 }
 
-function getMostElectedNode(elections: ElectionRecord[]): number {
+function getMostElectedNode(elections: ElectionRecordDto[]): number {
   if (elections.length === 0) return 0;
   
   const counts = elections.reduce((acc, election) => {

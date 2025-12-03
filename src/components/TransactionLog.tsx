@@ -1,13 +1,7 @@
-interface Transaction {
-  id: number;
-  timestamp: string;
-  nodeId: number;
-  actionType: 'LOCK' | 'BUY' | 'RELEASE' | 'ELECTION' | 'HEARTBEAT';
-  description: string;
-}
+import { TransactionDto } from "@/features/transaction_logs/dto/response/transaction.dto";
 
 interface TransactionLogProps {
-  transactions: Transaction[];
+  transactions: TransactionDto[];
 }
 
 const getActionColor = (actionType: string) => {
