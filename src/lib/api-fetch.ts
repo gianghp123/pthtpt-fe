@@ -1,4 +1,3 @@
-import 'server-only';
 import { ServerResponseModel } from './typedefs/server-response';
 
 type ApiFetchOptions = {
@@ -14,15 +13,25 @@ export async function apiFetch<T = any>(
 ): Promise<ServerResponseModel<T>> {
 
   try {
+    // Determine default base URL
+    let defaultBaseUrl = '';
+    if (typeof window === 'undefined') {
+      // Server-side: Must use absolute URL
+      defaultBaseUrl = process.env.API_URL || 'http://localhost:3001';
+    } else {
+      defaultBaseUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001';
+    }
+
     const {
       withCredentials = false,
       transformCase = true,
-      baseUrl = process.env.API_URL,
+      baseUrl = defaultBaseUrl,
       query,
       ...fetchOptions
     } = options || {};
 
-    if (!baseUrl) {
+    // Only throw if we are on server and no baseUrl is resolved
+    if (!baseUrl && typeof window === 'undefined') {
       throw new Error('Server API_URL is not configured. Please set API_URL environment variable.');
     }
 
@@ -64,8 +73,8 @@ export async function apiFetch<T = any>(
       let message = "Unknown error";
       try {
         const errorData = await response.json();
-        message = errorData.message || message;
-      } catch (_) {}
+        message = errorData.error || errorData.message || message;
+      } catch (_) { }
       return { success: false, statusCode: response.status, message };
     }
 
