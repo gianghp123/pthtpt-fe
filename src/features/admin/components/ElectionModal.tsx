@@ -9,19 +9,8 @@ interface ElectionModalProps {
 }
 
 export function ElectionModal({ isElecting, electionSteps, newLeaderId }: ElectionModalProps) {
-  const [visible, setVisible] = useState(false);
 
-  useEffect(() => {
-    if (isElecting) {
-      setVisible(true);
-    } else if (newLeaderId !== null) {
-      // Keep visible for 2 more seconds after election completes
-      const timer = setTimeout(() => setVisible(false), 2000);
-      return () => clearTimeout(timer);
-    }
-  }, [isElecting, newLeaderId]);
-
-  if (!visible) return null;
+  if (!isElecting) return null;
 
   return (
     <div className="fixed inset-0 flex items-center justify-center z-50 p-4">

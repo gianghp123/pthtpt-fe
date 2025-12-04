@@ -28,6 +28,8 @@ export default function AdminClient({
 }: AdminClientProps) {
   const [systemActive, setSystemActive] = useState(true);
 
+  console.log('admin page')
+
   // Use our custom hooks
   const {
     nodes,
@@ -61,14 +63,9 @@ export default function AdminClient({
     isElecting,
     electionHistory,
     showHistoryModal,
-    electNewLeader,
+    // electNewLeader,
     setShowHistoryModal,
-  } = useElection({
-    nodes,
-    seats,
-    addTransaction: originalAddTransaction,
-    updateNodeStatus,
-  });
+  } = useElection();
 
   // Enhance the kill node function with election triggering
   const handleKillNode = useCallback(
@@ -77,9 +74,9 @@ export default function AdminClient({
 
       // Trigger election if killed node was leader
       const killedNode = nodes.find((n) => n.id === nodeId);
-      if (killedNode?.isLeader) {
-        setTimeout(() => electNewLeader(nodeId), 500);
-      }
+      // if (killedNode?.isLeader) {
+      //   setTimeout(() => electNewLeader(nodeId), 500);
+      // }
 
       originalAddTransaction({
         id: Date.now(),
@@ -89,7 +86,7 @@ export default function AdminClient({
         description: `Node ${nodeId} has been terminated`,
       });
     },
-    [electNewLeader, nodes, originalAddTransaction, originalHandleKillNode]
+    [nodes, originalAddTransaction, originalHandleKillNode]
   );
 
   const handleReviveNode = useCallback(
@@ -113,67 +110,67 @@ export default function AdminClient({
   }, []);
 
   // Simulate some activity
-  useEffect(() => {
-    if (!systemActive) return;
+  // useEffect(() => {
+  //   if (!systemActive) return;
 
-    const interval = setInterval(() => {
-      const aliveNodes = nodes.filter((n) => n.alive);
-      if (aliveNodes.length === 0) return;
+  //   const interval = setInterval(() => {
+  //     const aliveNodes = nodes.filter((n) => n.alive);
+  //     if (aliveNodes.length === 0) return;
 
-      const randomNode =
-        aliveNodes[Math.floor(Math.random() * aliveNodes.length)];
-      const leader = nodes.find((n) => n.isLeader);
+  //     const randomNode =
+  //       aliveNodes[Math.floor(Math.random() * aliveNodes.length)];
+  //     const leader = nodes.find((n) => n.isLeader);
 
-      if (leader && Math.random() > 0.7) {
-        originalAddTransaction({
-          id: Date.now(),
-          timestamp: getCurrentTime(),
-          nodeId: leader.id,
-          actionType: ActionType.HEARTBEAT,
-          description: `Leader Node ${leader.id} sent heartbeat`,
-        });
-      } else if (Math.random() > 0.5) {
-        const availableSeats = seats.filter((s) => s.available);
-        if (availableSeats.length > 0 && Math.random() > 0.3) {
-          const randomSeat =
-            availableSeats[Math.floor(Math.random() * availableSeats.length)];
-          const customerNames = [
-            "Michael Lee",
-            "Sarah Connor",
-            "Tom Hardy",
-            "Lisa Ray",
-            "Chris Evans",
-          ];
-          const customerName =
-            customerNames[Math.floor(Math.random() * customerNames.length)];
+  //     if (leader && Math.random() > 0.7) {
+  //       originalAddTransaction({
+  //         id: Date.now(),
+  //         timestamp: getCurrentTime(),
+  //         nodeId: leader.id,
+  //         actionType: ActionType.HEARTBEAT,
+  //         description: `Leader Node ${leader.id} sent heartbeat`,
+  //       });
+  //     } else if (Math.random() > 0.5) {
+  //       const availableSeats = seats.filter((s) => s.available);
+  //       if (availableSeats.length > 0 && Math.random() > 0.3) {
+  //         const randomSeat =
+  //           availableSeats[Math.floor(Math.random() * availableSeats.length)];
+  //         const customerNames = [
+  //           "Michael Lee",
+  //           "Sarah Connor",
+  //           "Tom Hardy",
+  //           "Lisa Ray",
+  //           "Chris Evans",
+  //         ];
+  //         const customerName =
+  //           customerNames[Math.floor(Math.random() * customerNames.length)];
 
-          updateSeatAvailability(
-            randomSeat.id,
-            false,
-            customerName,
-            randomNode.id
-          );
+  //         updateSeatAvailability(
+  //           randomSeat.id,
+  //           false,
+  //           customerName,
+  //           randomNode.id
+  //         );
 
-          originalAddTransaction({
-            id: Date.now(),
-            timestamp: getCurrentTime(),
-            nodeId: randomNode.id,
-            actionType: ActionType.BUY,
-            description: `Customer ${customerName} bought Seat ${randomSeat.seatNumber}`,
-          });
-        }
-      }
-    }, 3000);
+  //         originalAddTransaction({
+  //           id: Date.now(),
+  //           timestamp: getCurrentTime(),
+  //           nodeId: randomNode.id,
+  //           actionType: ActionType.BUY,
+  //           description: `Customer ${customerName} bought Seat ${randomSeat.seatNumber}`,
+  //         });
+  //       }
+  //     }
+  //   }, 3000);
 
-    return () => clearInterval(interval);
-  }, [
-    systemActive,
-    nodes,
-    seats,
-    originalAddTransaction,
-    getCurrentTime,
-    updateSeatAvailability,
-  ]);
+  //   return () => clearInterval(interval);
+  // }, [
+  //   systemActive,
+  //   nodes,
+  //   seats,
+  //   originalAddTransaction,
+  //   getCurrentTime,
+  //   updateSeatAvailability,
+  // ]);
 
   return (
     <div className="min-h-screen w-full max-w-[1600px] mx-auto">

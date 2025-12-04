@@ -11,7 +11,6 @@ export const useTransactions = (): UseTransactionsResult => {
   const [transactions, setTransactions] = useState<TransactionDto[]>([]);
 
   const addTransaction = useCallback((transaction: TransactionDto) => {
-    console.log(transaction.id)
     setTransactions(prev => [transaction, ...prev].slice(0, 50)); // Keep last 50 transactions
   }, []);
 

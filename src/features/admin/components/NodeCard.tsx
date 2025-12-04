@@ -25,10 +25,10 @@ export function NodeCard({ node, onKill, onRevive }: NodeCardProps) {
         <div className="flex items-center gap-2">
           <Circle
             className={`w-3 h-3 ${
-              node.alive ? 'fill-green-400 text-green-400' : 'fill-gray-400 text-gray-400'
+              node.isAlive ? 'fill-green-400 text-green-400' : 'fill-gray-400 text-gray-400'
             }`}
             style={{
-              filter: node.alive ? 'drop-shadow(0 0 4px rgba(74, 222, 128, 0.8))' : 'none',
+              filter: node.isAlive ? 'drop-shadow(0 0 4px rgba(74, 222, 128, 0.8))' : 'none',
             }}
           />
           <span className="text-purple-950">Node {node.id}</span>
@@ -43,7 +43,7 @@ export function NodeCard({ node, onKill, onRevive }: NodeCardProps) {
       <div className="mb-4">
         <p className="text-xs text-purple-950/70 mb-1">Status</p>
         <p className="text-sm text-purple-950">
-          {node.alive ? 'Alive' : 'Dead'}
+          {node.isAlive ? 'Alive' : 'Dead'}
         </p>
         <p className="text-xs text-purple-950/70 mt-1">
           {node.isLeader ? 'Leader' : 'Follower'}
@@ -54,9 +54,9 @@ export function NodeCard({ node, onKill, onRevive }: NodeCardProps) {
       <div className="flex flex-col gap-2">
         <button
           onClick={() => onKill(node.id)}
-          disabled={!node.alive}
+          disabled={!node.isAlive}
           className={`px-3 py-2 rounded-xl border-2 text-xs transition-all ${
-            node.alive
+            node.isAlive
               ? 'border-red-400 bg-red-500/30 text-red-950 hover:bg-red-500/50'
               : 'border-gray-500/50 bg-gray-500/20 text-gray-400 cursor-not-allowed'
           }`}
@@ -65,9 +65,9 @@ export function NodeCard({ node, onKill, onRevive }: NodeCardProps) {
         </button>
         <button
           onClick={() => onRevive(node.id)}
-          disabled={node.alive}
+          disabled={node.isAlive}
           className={`px-3 py-2 rounded-xl border-2 text-xs transition-all ${
-            !node.alive
+            !node.isAlive
               ? 'border-green-400 bg-green-500/30 text-green-950 hover:bg-green-500/50'
               : 'border-gray-500/50 bg-gray-500/20 text-gray-400 cursor-not-allowed'
           }`}

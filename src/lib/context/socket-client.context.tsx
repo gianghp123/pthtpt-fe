@@ -8,7 +8,7 @@ interface SocketContextType {
   isConnected: boolean;
 }
 
-const SOCKET_URL = `ws://${process.env.NEXT_PUBLIC_IP_NETWORK}:${process.env.NEXT_PUBLIC_SOCKET_PORT}` || 'ws://localhost:4000';
+const SOCKET_URL = `http://${process.env.NEXT_PUBLIC_IP_NETWORK}:${process.env.NEXT_PUBLIC_SOCKET_PORT}` || 'ws://localhost:4000';
 
 const SocketContext = createContext<SocketContextType>({
   socket: null,
@@ -18,7 +18,7 @@ const SocketContext = createContext<SocketContextType>({
 export const SocketProvider = ({ children }: { children: React.ReactNode }) => {
   const [socket, setSocket] = useState<Socket | null>(null);
   const [isConnected, setIsConnected] = useState(false);
-
+  
   useEffect(() => {
     const socketInstance = io(SOCKET_URL, {
       transports: ['websocket'],
