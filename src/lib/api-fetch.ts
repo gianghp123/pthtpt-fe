@@ -1,3 +1,4 @@
+import 'server-only';
 import { ServerResponseModel } from './typedefs/server-response';
 
 type ApiFetchOptions = {
@@ -16,7 +17,7 @@ export async function apiFetch<T = any>(
     const {
       withCredentials = false,
       transformCase = true,
-      baseUrl = process.env.NEXT_PUBLIC_API_URL ?? process.env.API_URL,
+      baseUrl = process.env.API_URL,
       query,
       ...fetchOptions
     } = options || {};

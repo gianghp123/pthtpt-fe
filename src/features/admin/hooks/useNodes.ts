@@ -9,6 +9,7 @@ interface UseNodesResult {
   handleReviveNode: (nodeId: number) => void;
   updateNodeStatus: (nodeId: number, alive: boolean, isLeader: boolean) => void;
 }
+const [error, setError] = useState<string | null>(null);
 
 export const useNodes = (initialNodes: NodeDto[] = []): UseNodesResult => {
   const [nodes, setNodes] = useState<NodeDto[]>(initialNodes);
@@ -21,23 +22,27 @@ export const useNodes = (initialNodes: NodeDto[] = []): UseNodesResult => {
 
   const handleKillNode = useCallback(async(nodeId: number) => {
     try{
+      setError(null);
       await NodeService.kill(nodeId);
       setNodes(prev => prev.map(node =>
       node.id === nodeId ? { ...node, alive: false, isLeader: false } : node
       ));
-    } catch (error) {
-      console.error('Failed to kill node:', error);
+    } catch (err : any) {
+      console.error('Failed to kill node:', err);
+      setError(err.message || 'Failed to kill node');
     }
   }, []);
 
   const handleReviveNode = useCallback(async(nodeId: number) => {
     try{
+      setError(null);
       await NodeService.revive(nodeId);
       setNodes(prev => prev.map(node =>
       node.id === nodeId ? { ...node, alive: true } : node
       ));
-    }catch (error) {
-      console.error('Failed to revive node:', error);
+    }catch (err : any) {
+      console.error('Failed to revive node:', err);
+      setError(err.message || 'Failed to revive node');
     }
   }, []);
 
