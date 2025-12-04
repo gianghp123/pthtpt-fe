@@ -1,7 +1,7 @@
 import { useState, useCallback } from 'react';
 import { NodeDto } from '@/features/nodes/dto/response/node.dto';
+import { NodeService } from '@/features/nodes/services/node.service';
 
-const API_BASE_URL = '/api';
 interface UseNodesResult {
   nodes: NodeDto[];
   setNodes: React.Dispatch<React.SetStateAction<NodeDto[]>>;
@@ -21,37 +21,23 @@ export const useNodes = (initialNodes: NodeDto[] = []): UseNodesResult => {
 
   const handleKillNode = useCallback(async(nodeId: number) => {
     try{
-      const res = await fetch(`${API_BASE_URL}/node/${nodeId}/kill`, {
-        method: 'POST',
-        headers: { "Content-Type": "application/json" }
-      });
-
-      if(!res.ok){
-        throw new Error(`Failed to kill node with id ${nodeId}`);
-      }
-      //update state UI
+      await NodeService.kill(nodeId);
       setNodes(prev => prev.map(node =>
       node.id === nodeId ? { ...node, alive: false, isLeader: false } : node
-    ));
-    }catch(err){
-      console.error(err);
+      ));
+    } catch (error) {
+      console.error('Failed to kill node:', error);
     }
   }, []);
 
   const handleReviveNode = useCallback(async(nodeId: number) => {
     try{
-      const res = await fetch(`${API_BASE_URL}/node/${nodeId}/revive`, {
-        method: 'POST',
-        headers: { "Content-Type": "application/json" }
-      });
-      if(!res.ok){
-        throw new Error(`Failed to revive node with id ${nodeId}`);
-      }
-    setNodes(prev => prev.map(node =>
+      await NodeService.revive(nodeId);
+      setNodes(prev => prev.map(node =>
       node.id === nodeId ? { ...node, alive: true } : node
-    ));
-    }catch(err){
-      console.error(err);
+      ));
+    }catch (error) {
+      console.error('Failed to revive node:', error);
     }
   }, []);
 
