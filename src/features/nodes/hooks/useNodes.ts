@@ -1,6 +1,6 @@
 import { NodeDto } from "@/features/nodes/dto/response/node.dto";
 import { killNode, reviveNode } from "@/features/nodes/services/node.action";
-import { useCallback, useState, useTransition } from "react";
+import { useCallback, useEffect, useState, useTransition } from "react";
 
 interface UseNodesResult {
   nodes: NodeDto[];
@@ -8,11 +8,6 @@ interface UseNodesResult {
   setNodes: React.Dispatch<React.SetStateAction<NodeDto[]>>;
   handleKillNode: (nodeId: number) => void;
   handleReviveNode: (nodeId: number) => void;
-  updateNodeStatus: (
-    nodeId: number,
-    isAlive: boolean,
-    isLeader: boolean
-  ) => void;
 }
 
 export const useNodes = (initialNodes: NodeDto[] = []): UseNodesResult => {
@@ -20,16 +15,7 @@ export const useNodes = (initialNodes: NodeDto[] = []): UseNodesResult => {
   const [isPending, startTransition] = useTransition();
   const [error, setError] = useState<string | null>(null);
 
-  const updateNodeStatus = useCallback(
-    (nodeId: number, isAlive: boolean, isLeader: boolean) => {
-      setNodes((prev) =>
-        prev.map((node) =>
-          node.id === nodeId ? { ...node, isAlive: isAlive, isLeader } : node
-        )
-      );
-    },
-    []
-  );
+  console.log(nodes)
 
   const handleKillNode = useCallback(async (nodeId: number) => {
     startTransition(async () => {
@@ -73,6 +59,5 @@ export const useNodes = (initialNodes: NodeDto[] = []): UseNodesResult => {
     setNodes,
     handleKillNode,
     handleReviveNode,
-    updateNodeStatus,
   };
 };
