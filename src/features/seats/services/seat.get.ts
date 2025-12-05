@@ -15,7 +15,6 @@ export const getAllSeats = async (): Promise<SeatDto[]> => {
     next: { tags: ["seats"] },
     cache: "no-store",
   });
-
   if (!response.success || !response.data) {
     throw new Error(response.message || "Failed to fetch seats");
   }

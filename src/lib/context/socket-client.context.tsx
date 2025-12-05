@@ -8,7 +8,9 @@ interface SocketContextType {
   isConnected: boolean;
 }
 
-const SOCKET_URL = `http://${process.env.NEXT_PUBLIC_IP_NETWORK}:${process.env.NEXT_PUBLIC_SOCKET_PORT}` || 'ws://localhost:4000';
+const ip = process.env.NEXT_PUBLIC_IP_NETWORK || 'localhost';
+const port = process.env.NEXT_PUBLIC_SOCKET_PORT || '4000';
+const SOCKET_URL = `http://${ip}:${port}`;
 
 const SocketContext = createContext<SocketContextType>({
   socket: null,
