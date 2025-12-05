@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
 import { TransactionDto } from '@/features/transaction_logs/dto/response/transaction.dto';
-import { TransactionService } from '@/features/transaction_logs/services/transaction.service';
+import { getTransactionLogs } from '@/features/transaction_logs/services/transaction.service';
 interface UseTransactionsResult {
   transactions: TransactionDto[];
   loading: boolean;
@@ -19,7 +19,7 @@ export const useTransactions = (limit: number = 50): UseTransactionsResult => {
     try{
       setLoading(true);
       setError(null);
-      const data = await TransactionService(limit);
+      const data = await getTransactionLogs(limit);
       setTransactions(data);
     } catch (err){
       console.error('Failed to fetch transactions:', err);
