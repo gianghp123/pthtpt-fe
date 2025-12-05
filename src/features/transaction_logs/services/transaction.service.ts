@@ -5,7 +5,7 @@ import { TransactionDto } from '../dto/response/transaction.dto';
 export async function getTransactionLogs(
   limit: number = 50
 ): Promise<TransactionDto[]> {
-  const response = await apiFetch<TransactionDto[]>('/transactions', {
+  const response = await apiFetch<TransactionDto[]>('/transaction', {
     query: { limit },
   });
 
