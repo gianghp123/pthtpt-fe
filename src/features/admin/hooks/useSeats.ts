@@ -12,7 +12,8 @@ export const useSeats = (initialSeats: SeatDto[] = []): UseSeatsResult => {
 
   const updateSeatAvailability = useCallback((seatId: string, available: boolean, customerName?: string, bookedByNode?: number) => {
     setSeats(prev => prev.map(seat =>
-      seat.id === seatId
+      // [SỬA ĐỔI TẠI ĐÂY]: So sánh với seatNumber thay vì id
+      seat.seatNumber === seatId 
         ? { ...seat, available, customerName, bookedByNode }
         : seat
     ));
